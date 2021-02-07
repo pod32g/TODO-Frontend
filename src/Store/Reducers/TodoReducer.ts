@@ -23,6 +23,12 @@ const todoReducer = (state: ITodoState = initialState, actions: TodoActions): IT
                 ...state,
                 filteredTodos: actions.payload.todos
             }
+        case Todo.Set_Todos:
+            return {
+                ...state,
+                todos: actions.payload.todos,
+                filteredTodos: actions.payload.todos
+            }
         default:
             return state
     }

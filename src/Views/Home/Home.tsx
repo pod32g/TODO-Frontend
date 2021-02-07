@@ -1,14 +1,14 @@
-import React, { FunctionComponent, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { NoElements, TodoCard } from '../../Components'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import { useDispatch, useSelector } from 'react-redux'
 import rootReducer from '../../Store/Reducers';
-import './Home.scss'
-import { filterTodos } from '../../Store/Actions/todoActions'
+import { filterTodos, getTodos } from '../../Store/Actions/todoActions'
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import { TodoForm } from '../TodoForm/TodoForm'
 import ITodo from '../../Util/Types/TodoInfo'
+import './Home.scss'
 
 export const Home: FunctionComponent = () => {
 
@@ -25,23 +25,32 @@ export const Home: FunctionComponent = () => {
         dispatch(filterTodos(newFilter))
     }
 
+    useEffect(() => {
+        if (user) dispatch(getTodos())
+    }, [user, dispatch])
+
+
     return (
         <div className="container">
             <ToggleButtonGroup className="filter-toggle" value={filter} exclusive onChange={handleToggle}>
-                <ToggleButton value="all">All</ToggleButton>
-                <ToggleButton value="pending">Pending</ToggleButton>
-                <ToggleButton value="done">Done</ToggleButton>
+                <ToggleButton key="filter-all" id="filter-all" value="all">All</ToggleButton>
+                <ToggleButton key="filter-pending" id="filter-pending" value="pending">Pending</ToggleButton>
+                <ToggleButton key="filter-done" id="filter-done" value="done">Done</ToggleButton>
             </ToggleButtonGroup>
-            <TodoForm el={editElement} show={newTodo} onClose={() => showNewTodo(false)} />
+            <TodoForm el={editElement} show={newTodo} onClose={() => {
+                showNewTodo(false)
+                setEditElement(undefined)
+            }} />
 
-            <Fab color="primary" aria-label="add" className="new-btn" onClick={() => {
+            <Fab id="add-btn" color="primary" aria-label="add" className="new-btn" onClick={() => {
+                setEditElement(undefined)
                 showNewTodo(true)
             }}>
                 <AddIcon />
             </Fab>
             {
                 filteredTodos.length === 0 ?
-                    <NoElements user={user} />
+                    <NoElements key="no-elements" user={user} />
                     :
                     <ul>
                         {

@@ -6,7 +6,7 @@ import './NoElements.scss'
 export const NoElements: FunctionComponent<INoElementsProps> = ({ user }) => {
     return (
         <div className="no-element-container">
-            <Typography>
+            <Typography id="no-elements-text">
                 {
                     user ? "There's nothing to show, press the '+' button to add a new TODO" :
                         "Please note, this is a Demo session, the TODO notes added here will be lost once you exit the page"

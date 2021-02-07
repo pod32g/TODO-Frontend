@@ -1,21 +1,23 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Login as loginAction } from '../../Store/Actions/authenticationActions'
+import { SignUp as signUpAction } from '../../Store/Actions/authenticationActions'
 import rootReducer from '../../Store/Reducers'
-import './Login.scss'
+import './SignUp.scss'
 
-export const Login: FunctionComponent = () => {
+export const SignUp: FunctionComponent = () => {
 
-    const dispatch = useDispatch()
     const { token } = useSelector((state: ReturnType<typeof rootReducer>) => state.authentication)
     const navigation = useHistory()
+    const dispatch = useDispatch()
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
 
-    const handleLogin = () => {
-        dispatch(loginAction(username, password))
+
+    const handleSignUp = () => {
+        dispatch(signUpAction(username, password, email))
     }
 
     useEffect(() => {
@@ -24,13 +26,14 @@ export const Login: FunctionComponent = () => {
     }, [token, navigation])
 
     return (
-        <div className="login-container">
-            <div className="form" id="login-form">
-                <p className="title" id='title'>Login</p>
-                <div className="inputs">
+        <div className="signup-container">
+            <div className="form">
+                <p className="title" id='title'>Sign Up</p>
+                <div className="inputs" id="form">
                     <input type="text" placeholder="Username" id='user-input' onChange={(e) => setUsername(e.target.value)} />
+                    <input type="email" placeholder="Email" id='email-input' onChange={(e) => setEmail(e.target.value)} />
                     <input type="password" placeholder="Password" id='pass-input' onChange={(e) => setPassword(e.target.value)} />
-                    <button onClick={handleLogin} id='login-btn' className="login-btn">Login</button>
+                    <button onClick={handleSignUp} className="login-btn" id='login-btn'>Sign up</button>
                 </div>
             </div>
         </div>

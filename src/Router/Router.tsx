@@ -4,6 +4,7 @@ import { NavBar } from '../Components';
 import IRoute from '../Util/Types/Route';
 import { Home } from '../Views';
 import { Login } from '../Views/Login/Login';
+import { SignUp } from '../Views/SignUp/SignUp';
 
 const routes: IRoute[] = [
     {
@@ -16,6 +17,12 @@ const routes: IRoute[] = [
         name: 'Login',
         route: '/login',
         component: Login,
+        navBar: false
+    },
+    {
+        name: 'SignUp',
+        route: '/signup',
+        component: SignUp,
         navBar: false
     }
 ]

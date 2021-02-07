@@ -3,7 +3,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import ITodoFormProps from './TodoForm.props'
 import { useDispatch } from 'react-redux'
 import './TodoForm.scss'
-import { addTodo } from '../../Store/Actions/todoActions'
+import { addTodo, editTodo } from '../../Store/Actions/todoActions'
 
 export const TodoForm: FunctionComponent<ITodoFormProps> = ({ show, onClose, el }) => {
 
@@ -12,7 +12,11 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({ show, onClose, el 
     const [content, setContent] = useState('')
 
     const handleSave = () => {
-        dispatch(addTodo(title, content))
+        if (el) {
+            dispatch(editTodo(el, title, content))
+        } else {
+            dispatch(addTodo(title, content))
+        }
         onClose()
     }
 
@@ -23,10 +27,13 @@ export const TodoForm: FunctionComponent<ITodoFormProps> = ({ show, onClose, el 
         }
     }, [el])
 
-
     return (
-        <Modal open={show} onClose={onClose}>
-            <div className="modal-container">
+        <Modal open={show} onClose={() => {
+            setTitle('')
+            setContent('')
+            onClose()
+        }}>
+            <div className="modal-container modal-center">
                 <div className="inputs">
                     <TextField className="element" id="standard-basic" label="Title" variant="outlined" value={title} onChange={(event) => setTitle(event.target.value)} />
                     <TextField multiline rows={20} className="element" id="outlined-basic" label="Content" variant="outlined" value={content} onChange={(event) => setContent(event.target.value)} />

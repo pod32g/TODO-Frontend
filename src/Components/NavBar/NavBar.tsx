@@ -1,7 +1,9 @@
 import { AppBar, Button, makeStyles, Toolbar, Typography } from '@material-ui/core'
 import React, { FunctionComponent } from 'react'
 import { useHistory } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux'
+import rootReducer from '../../Store/Reducers'
+import { Logout } from '../../Store/Actions/authenticationActions';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -10,26 +12,37 @@ const useStyles = makeStyles(() => ({
     title: {
         flexGrow: 1,
     },
-}));
+}))
 
 export const NavBar: FunctionComponent = () => {
 
-    const classes = useStyles();
+    const classes = useStyles()
     const navigation = useHistory()
+    const dispatch = useDispatch()
+    const { token } = useSelector((state: ReturnType<typeof rootReducer>) => state.authentication)
 
-    const login = () => {
-        navigation.push('/login')
+    const handleButtonPress = () => {
+        if (!token) {
+            navigation.push('/login')
+            return
+        }
+
+        dispatch(Logout())
+        navigation.go(0)
     }
 
     return (
         <AppBar position="sticky">
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
-                    TODO
+                    TODO-App
                 </Typography>
-                <Button onClick={login} color="inherit">Login</Button>
+                <Button onClick={handleButtonPress} color="inherit">{token ? 'Logout' : 'Login'}</Button>
+                {
+                    !token &&
+                    <Button onClick={() => navigation.push('/signup')} color="inherit">Sign Up</Button>
+                }
             </Toolbar>
         </AppBar>
     )
 }
-
